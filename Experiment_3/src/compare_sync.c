@@ -23,7 +23,9 @@ static long long run_critical(int threads, double *elapsed) {
     #pragma omp parallel for num_threads(threads)
     for (long long i = 0; i < TOTAL_INCREMENTS; ++i) {
         #pragma omp critical
-        counter++;
+        {
+            counter++;
+        }
     }
 
     *elapsed = omp_get_wtime() - start;
