@@ -188,4 +188,15 @@ The experiment demonstrates the role of cache-coherence protocols in maintaining
 
 ## Screenshot evidence
 
-The terminal screenshots are stored in `screenshots/`. They document package installation, compiler and runtime verification, CPU and NUMA topology, protocol simulation, false-sharing execution and benchmark results.
+The 12 original terminal screenshots were supplied in this conversation and reviewed while preparing this documentation. They are **not yet committed as image files** in this repository. The connected GitHub file-writing capability used for this update supports text files but does not expose a binary image-upload operation. To avoid broken image links, no image paths are presented as if the screenshots were already uploaded.
+
+To add them from a local clone, copy the screenshots into `Experiment_4/screenshots/` using descriptive names, then commit and push:
+
+```bash
+mkdir -p Experiment_4/screenshots
+# Copy the 12 supplied screenshot images into this folder.
+git add Experiment_4/screenshots
+git commit -m "Add Experiment 4 terminal screenshots"
+git push origin main
+```
+
