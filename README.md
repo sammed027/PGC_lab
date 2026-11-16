@@ -506,3 +506,13 @@ The results highlight that as the degree of parallelism increases and hardware i
 | **Verification** | `C[0][0] = 4000.00` |
 
 ---
+
+---
+
+## Experiment 3 – Synchronization Mechanisms in Parallel Programs
+
+Experiment 3 studies race conditions, critical sections, atomic operations, barriers, POSIX semaphores, and synchronization performance comparisons. The implementation, execution instructions, observations, and screenshot-derived results are documented here:
+
+[Open Experiment 3](Experiment_3/README.md)
+
+> Note: Source files in `Experiment_3/src/` are reconstructed from the lab manual and submitted terminal screenshots because the original C source files were not available. See the Experiment 3 README for this provenance note and recorded benchmark data.
