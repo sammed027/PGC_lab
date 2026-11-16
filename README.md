@@ -525,3 +525,12 @@ Experiment 3 studies race conditions, critical sections, atomic operations, barr
 Experiment 4 studies MSI, MESI and MOESI cache-coherence protocols, false sharing, cache-line padding, and NUMA memory access. It includes reconstructed source files, execution instructions, recorded terminal results, and screenshot evidence.
 
 [Open Experiment 4](Experiment_4/README.md)
+
+
+---
+
+## Experiment 5 – Neural Network Layers in CUDA
+
+Custom CUDA kernels for matrix multiplication with bias, ReLU, and sigmoid; CPU/GPU correctness validation and performance comparison on an NVIDIA GeForce RTX 5060 Ti.
+
+[Open Experiment 5](Experiment_5/README.md)
