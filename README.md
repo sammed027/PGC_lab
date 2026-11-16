@@ -516,3 +516,12 @@ Experiment 3 studies race conditions, critical sections, atomic operations, barr
 [Open Experiment 3](Experiment_3/README.md)
 
 > Note: Source files in `Experiment_3/src/` are reconstructed from the lab manual and submitted terminal screenshots because the original C source files were not available. See the Experiment 3 README for this provenance note and recorded benchmark data.
+
+
+---
+
+## Experiment 4 – Cache Coherence and NUMA Memory Access Performance
+
+Experiment 4 studies MSI, MESI and MOESI cache-coherence protocols, false sharing, cache-line padding, and NUMA memory access. It includes reconstructed source files, execution instructions, recorded terminal results, and screenshot evidence.
+
+[Open Experiment 4](Experiment_4/README.md)
