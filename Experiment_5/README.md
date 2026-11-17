@@ -1,39 +1,44 @@
-# Experiment 5 – Synchronization Mechanisms in Parallel Programs
+# Experiment 5 — Synchronization Mechanisms in Parallel Programs
 
 ## Aim
-Study synchronization techniques and understand how they prevent race conditions when multiple threads access shared data.
+Demonstrate race conditions and compare mechanisms that coordinate concurrent access to shared data.
 
 ## Concepts
 - Race conditions and lost updates
-- OpenMP critical sections and atomic operations
+- OpenMP critical sections
+- OpenMP atomic updates
 - Thread barriers
 - POSIX semaphores
-- Synchronization performance comparison
+- Timing and correctness comparison
 
-## Environment
+## Recorded environment
 - Host: MacBook
-- VM: VMware Fusion, Ubuntu 24.04.5 LTS
+- Virtual machine: VMware Fusion with Ubuntu 24.04.5 LTS
 - Compiler: GCC
-- Benchmark iterations: 10,000,000
-- Thread counts: 1, 2, 4 and 8
+- Comparison iterations: 10,000,000
+- Thread counts in the comparison program: 1, 2, 4 and 8
 
 ## Source files
-| File | Purpose |
-|---|---|
-| `src/race.c` | Unprotected shared counter |
-| `src/critical.c` | OpenMP critical section |
-| `src/atomic.c` | OpenMP atomic update |
-| `src/barrier.c` | Thread barrier |
-| `src/semaphore.c` | POSIX semaphore |
-| `src/compare_sync.c` | Synchronization benchmark |
+
+| File | Purpose | Expected behavior |
+|---|---|---|
+| [`src/race.c`](src/race.c) | Unprotected shared counter | Demonstrates a data race; final value is not guaranteed |
+| [`src/critical.c`](src/critical.c) | OpenMP critical region | Serializes the protected increment; expected 1,000,000 |
+| [`src/atomic.c`](src/atomic.c) | OpenMP atomic update | Protects the increment operation; expected 1,000,000 |
+| [`src/barrier.c`](src/barrier.c) | OpenMP barrier | Makes both threads wait before proceeding |
+| [`src/semaphore.c`](src/semaphore.c) | POSIX semaphore with pthreads | Protects two workers' increments; expected 200,000 |
+| [`src/compare_sync.c`](src/compare_sync.c) | Compares no protection, critical, atomic and OpenMP lock | Tests 10,000,000 increments at 1, 2, 4 and 8 threads |
 
 ## Setup
+
 ```bash
 sudo apt update
 sudo apt install build-essential
 ```
 
 ## Compile and run
+Run from the repository root:
+
 ```bash
 gcc -O2 -fopenmp Experiment_5/src/race.c -o race && ./race
 gcc -O2 -fopenmp Experiment_5/src/critical.c -o critical && ./critical
@@ -44,14 +49,20 @@ gcc -O2 -fopenmp Experiment_5/src/compare_sync.c -o compare_sync && ./compare_sy
 ```
 
 ## Recorded observations
-- Race demonstration: final counter 1,000,000 in the captured run.
-- Critical section: final counter 1,000,000.
-- Atomic operation: final counter 1,000,000.
-- POSIX semaphore: final counter 200,000.
-- In the comparison runs, unsynchronized multi-threaded updates lost increments, while critical, atomic and lock implementations reached the expected count of 10,000,000.
+- The captured run of the race demonstration printed 1,000,000, but that value is not guaranteed because the update is intentionally unprotected.
+- The critical-section and atomic examples reached the expected count of 1,000,000 in the recorded runs.
+- The semaphore program uses two threads with 100,000 increments each and reached 200,000.
+- In the comparison benchmark, unsynchronized multi-threaded updates lost increments in the recorded runs, while critical, atomic and lock-based updates reached 10,000,000.
 - Atomic updates were faster than critical-section and lock approaches in the recorded benchmark runs.
 
-Execution times and unsynchronized counts varied between runs due to scheduling and system load.
+Timings and the incorrect count from a data-race run can change between executions. Do not interpret a single race output as a stable result.
+
+## Key interpretation
+- A **critical section** protects a block of statements.
+- An **atomic operation** protects a supported individual memory update.
+- A **semaphore** controls access using a counter and wait/post operations.
+- A **barrier** synchronizes phases; it does not, by itself, protect a shared counter increment.
+- Correctness and elapsed time should both be checked when comparing synchronization techniques.
 
 ## Conclusion
-The experiment demonstrates lost updates from unsynchronized concurrent access and shows how critical sections, atomic operations, locks and semaphores protect shared resources, with additional synchronization overhead.
+The experiment shows why shared updates require synchronization. Critical sections, atomic operations, locks and semaphores can preserve correctness, but they introduce different costs. A barrier serves a different purpose by coordinating when threads move to the next phase.
