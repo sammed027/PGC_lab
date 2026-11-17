@@ -1,42 +1,57 @@
-# Experiment 7 – Neural Network Layers in CUDA
+# Experiment 7 — Neural Network Layers in CUDA
 
 ## Aim
-Implement neural-network forward-pass operations using CUDA kernels and compare CPU/GPU correctness and performance.
+Implement the forward pass of a small two-layer neural network using CUDA kernels, then compare CPU and GPU outputs and execution times.
 
-## Network
+> This experiment demonstrates inference-style forward-pass operations. It does not train a neural network or use an external dataset.
+
+## Network workflow
+
 ```text
-Input (256 × 128)
-  -> Matrix multiplication + bias
-  -> ReLU
-  -> Hidden layer (256 × 64)
-  -> Matrix multiplication + bias
-  -> Sigmoid
-  -> Output (256 × 10)
+Input: 256 × 128
+       |
+Matrix multiplication + bias
+       |
+      ReLU
+       |
+Hidden layer: 256 × 64
+       |
+Matrix multiplication + bias
+       |
+    Sigmoid
+       |
+Output: 256 × 10
 ```
 
-## Environment
-- OS: Windows
+The input and weight arrays are initialized with deterministic sine/cosine-based values in the program.
+
+## Environment recorded for the run
+- Operating system: Windows
 - GPU: NVIDIA GeForce RTX 5060 Ti (16,311 MiB reported)
 - NVIDIA driver: 621.24
 - CUDA Toolkit: 13.5
 - Compiler: NVCC
 
-## Source
-- `neural_network.cu`
+A compatible NVIDIA GPU, driver, CUDA Toolkit and Visual Studio C++ build environment are required for the recorded Windows build workflow.
 
-## Build and run
-Use a Visual Studio Developer Command Prompt with CUDA and MSVC configured:
+## Source file
+- [`neural_network.cu`](neural_network.cu) — CPU reference functions, CUDA matrix multiplication with bias, ReLU and sigmoid kernels, validation tests and timing.
+
+## Compile and run
+Open a Visual Studio Developer Command Prompt with CUDA and MSVC configured. From the repository root:
 
 ```bat
 nvcc --version
 nvidia-smi
-nvcc -O2 neural_network.cu -o neural_network.exe
-neural_network.exe
+nvcc -O2 Experiment_7/neural_network.cu -o Experiment_7/neural_network.exe
+Experiment_7\neural_network.exe
 ```
+
+The program performs individual kernel checks, runs the CPU and GPU forward passes, and compares their outputs. It averages timing across 20 repetitions.
 
 ## Recorded validation and performance
 
-| Measurement | Result |
+| Measurement | Recorded value |
 |---|---:|
 | Matrix multiplication + bias test | PASSED |
 | ReLU test | PASSED |
@@ -48,7 +63,19 @@ neural_network.exe
 | End-to-end speedup | 3.635949× |
 | Maximum absolute output difference | 0.000000 |
 
-Kernel-only timing excludes host/device transfers; end-to-end timing includes transfers and GPU execution. These are recorded measurements from the experiment setup.
+Kernel-only timing measures the GPU kernels and excludes host/device copies. The end-to-end measurement includes the input copies, GPU execution, synchronization and output copy. The values above are results from the recorded machine, not expected timings for every GPU.
+
+## Validation logic
+- The matrix multiplication test checks the output of a small matrix and bias example.
+- The ReLU test checks that negative values become zero and non-negative values remain unchanged.
+- The sigmoid test checks representative values against known results.
+- The full forward pass compares CPU and GPU output arrays; the program accepts a maximum absolute difference below `1e-4`.
+
+## What to observe
+- Each CUDA thread calculates an output matrix element or activation element.
+- The matrix multiplication kernel adds the bias after accumulating the dot product.
+- ReLU is applied to the hidden layer and sigmoid to the output layer.
+- Kernel-only speedup can be larger than end-to-end speedup because data transfers and synchronization contribute to total time.
 
 ## Conclusion
-The CUDA program implements matrix multiplication with bias, ReLU and sigmoid operations. The captured tests passed and CPU/GPU outputs matched within the program's validation tolerance.
+The CUDA implementation executes a two-layer forward pass and validates its operations against known values and a CPU reference. The recorded output difference was zero, and the end-to-end result shows why transfer costs should be considered alongside kernel performance.
