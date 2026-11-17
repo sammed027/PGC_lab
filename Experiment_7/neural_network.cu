@@ -1,4 +1,4 @@
-// Experiment 5: Neural Network Layers in CUDA
+// Experiment 7: Neural Network Layers in CUDA
 // Two-layer forward pass: MatMul + Bias -> ReLU -> MatMul + Bias -> Sigmoid.
 // CPU and GPU results are compared for correctness and performance.
 
@@ -189,7 +189,7 @@ int main() {
     cudaDeviceProp prop{};
     CUDA_CHECK(cudaGetDeviceProperties(&prop, 0));
 
-    std::cout << "EXPERIMENT 5: NEURAL NETWORK LAYERS IN CUDA\n";
+    std::cout << "EXPERIMENT 7: NEURAL NETWORK LAYERS IN CUDA\n";
     std::cout << "GPU detected: " << prop.name << "\n\n";
     std::cout << "Testing individual CUDA kernels...\n";
 
